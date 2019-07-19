@@ -114,7 +114,7 @@ class SortingRobot:
         """
         Logic:
         Turn light ON => Means the robot is sorting
-        comparte_item => since we are starting with None, 
+        comparte_item => since we are starting with None,
                          swap_item() to pick up the first item,
         move_right() and compare_item() until the end of the list
         when the end of the list has been reached, move_left() back to the first item (None)
@@ -122,8 +122,40 @@ class SortingRobot:
         Turn light OFF. The robot can now rest after what you put him through.
         """
         # Fill this out
+        # Turn light on and pick up 1st item
+        self.set_light_on()
+        # self.swap_item()
 
-        pass
+        while self.light_is_on():
+            # Turn light off while moving
+            self.set_light_off()
+            while self.can_move_right():
+                # As long as we can move right, move right
+                self.swap_item()
+                self.move_right()
+                # Compare item on hand w/ item in front
+                if self.compare_item() == 1:
+                    # If curr item is larger, swap
+                    # Move left, fill in previously empty spot
+                    # Move right to continue the loop
+                    self.swap_item()
+                    self.move_left()
+                    self.swap_item()
+                    self.move_right()
+                    # Turn light back on so we can keep moving right
+                    # Light on indicates that there are items left to be sorted
+                    self.set_light_on()
+                if self.compare_item() == -1 or self.compare_item() == 0:
+                    # Don't wanna set the light on here
+                    # Items are already sorted for the time being
+                    self.move_left()
+                    # Put the item back
+                    self.swap_item()
+                    self.move_right()
+            else:  # If we can't move right, go back to the first item
+                while self.can_move_left():
+                    self.move_left()
+            # Loop ends when we can't move left anymore and there is nothing left to sort
 
 
 if __name__ == "__main__":
